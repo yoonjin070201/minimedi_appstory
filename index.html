@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MINIMEDI — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Anta&family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --primary: #D76048;
+      --primary-light: #E8896F;
+      --primary-pale: #F5C4B3;
+      --primary-glow: rgba(215, 96, 72, 0.20);
+      --bg: #FFEED4;
+      --bg-card: #FFF8EE;
+      --bg-white: #FFFFFF;
+      --text-dark: #2D2218;
+      --text-mid: #6B4F3A;
+      --text-light: #A8876B;
+      --border: #F0D9BC;
+      --shadow: 0 4px 24px rgba(215, 96, 72, 0.10);
+      --shadow-card: 0 2px 12px rgba(180, 100, 60, 0.08);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* CUSTOM CURSOR */
+    body {
+      cursor: none;
+      background: var(--bg);
+      color: var(--text-dark);
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    #cursor-dot {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      background: var(--primary);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 99999;
+      top: 0;
+      left: 0;
+      will-change: transform;
+    }
+
+    #cursor-ring {
+      position: fixed;
+      width: 32px;
+      height: 32px;
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 99998;
+      top: 0;
+      left: 0;
+      opacity: 0.5;
+      transition: width .15s ease, height .15s ease, opacity .15s ease;
+      will-change: transform;
+    }
+
+    /* PROGRESS BAR */
+    #progress-bar-wrap {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      z-index: 200;
+    }
+
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--primary);
+      border-radius: 0 2px 2px 0;
+      box-shadow: 0 0 8px rgba(215, 96, 72, 0.5);
+      transition: width .04s linear;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 3px;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(255, 238, 212, 0.90);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 60px;
+    }
+
+    .nav-logo {
+      font-family: 'Anta', sans-serif;
+      font-weight: 400;
+      font-size: 20px;
+      color: var(--primary);
+      letter-spacing: 1px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-mid);
+      transition: color .2s;
+      cursor: none;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 100px 48px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 40%, rgba(215, 96, 72, 0.10) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      padding: 6px 18px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      letter-spacing: .5px;
+      margin-bottom: 32px;
+      box-shadow: var(--shadow-card);
+      animation: fadeUp .6s ease both;
+    }
+
+    .hero-badge::before {
+      content: '🐾';
+      font-size: 14px;
+    }
+
+    .hero-title {
+      font-family: 'Anta', sans-serif;
+      font-size: clamp(52px, 9vw, 96px);
+      font-weight: 400;
+      color: var(--text-dark);
+      line-height: 1.0;
+      letter-spacing: 3px;
+      animation: fadeUp .7s .1s ease both;
+    }
+
+    .hero-title .accent {
+      color: var(--primary);
+    }
+
+    .hero-subtitle {
+      font-size: 16px;
+      color: var(--text-mid);
+      max-width: 420px;
+      margin: 20px auto 40px;
+      animation: fadeUp .7s .2s ease both;
+      line-height: 1.8;
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 32px;
+      justify-content: center;
+      animation: fadeUp .7s .3s ease both;
+    }
+
+    .hero-meta-item {
+      text-align: center;
+    }
+
+    .hero-meta-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-light);
+      letter-spacing: .8px;
+      text-transform: uppercase;
+    }
+
+    .hero-meta-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-top: 4px;
+    }
+
+    .hero-phone-wrap {
+      margin-top: 56px;
+      animation: fadeUp .7s .4s ease both;
+    }
+
+    .hero-phone {
+      width: 200px;
+      aspect-ratio: 9/19;
+      background: var(--bg-white);
+      border-radius: 32px;
+      border: 2px solid var(--border);
+      box-shadow: 0 24px 64px rgba(215, 96, 72, 0.16);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      position: relative;
+      overflow: hidden;
+      margin: 0 auto;
+    }
+
+    .hero-phone::before {
+      content: '';
+      position: absolute;
+      top: 12px;
+      width: 60px;
+      height: 6px;
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    .phone-logo {
+      font-family: 'Anta', sans-serif;
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--primary);
+      letter-spacing: 1px;
+    }
+
+    .phone-start {
+      font-size: 13px;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    /* SECTION BASE */
+    section {
+      padding: 100px 48px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-num {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--primary);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 700;
+      font-style: normal;
+      line-height: 1.2;
+      letter-spacing: -0.3px;
+      color: var(--text-dark);
+      margin-bottom: 16px;
+    }
+
+    .section-title em {
+      font-style: normal;
+      color: var(--primary);
+    }
+
+    .section-desc {
+      font-size: 15px;
+      color: var(--text-mid);
+      max-width: 560px;
+      line-height: 1.8;
+      margin-bottom: 56px;
+    }
+
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, var(--primary-pale), transparent);
+    }
+
+    /* FLOWCHART */
+    .flowchart-wrap {
+      background: var(--bg-white);
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      padding: 40px;
+      box-shadow: var(--shadow-card);
+      transition: box-shadow .25s;
+    }
+
+    .flow-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .flow-node {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-dark);
+      text-align: center;
+      min-width: 100px;
+    }
+
+    .flow-node.primary {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .flow-node.sub {
+      background: var(--bg-card);
+      font-weight: 500;
+      font-size: 12px;
+      color: var(--text-mid);
+      min-width: 80px;
+      padding: 8px 14px;
+    }
+
+    .flow-arrow {
+      color: var(--primary-pale);
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .flow-sub-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* PROBLEM */
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .problem-card {
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: var(--shadow-card);
+      transition: box-shadow .25s;
+    }
+
+    .problem-num {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--primary-pale);
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .problem-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+
+    .problem-card p {
+      font-size: 13px;
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+
+    /* PERSONA */
+    .persona-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .persona-card {
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: var(--shadow-card);
+      transition: box-shadow .25s;
+    }
+
+    .persona-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+
+    .persona-name {
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .persona-info {
+      font-size: 12px;
+      color: var(--text-light);
+      margin-bottom: 16px;
+    }
+
+    .persona-quote {
+      background: var(--bg);
+      border-left: 3px solid var(--primary);
+      border-radius: 0 10px 10px 0;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+
+    /* FEATURES */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: var(--shadow-card);
+      transition: box-shadow .25s;
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 12px rgba(215, 96, 72, 0.25);
+    }
+
+    .feature-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      font-size: 13px;
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+
+    /* SCREENS MOCKUPS */
+    .screens-grid {
+      display: flex;
+      gap: 24px;
+      overflow-x: auto;
+      padding-bottom: 16px;
+      scroll-snap-type: x mandatory;
+    }
+
+    .screens-grid::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .screens-grid::-webkit-scrollbar-track {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    .screens-grid::-webkit-scrollbar-thumb {
+      background: var(--primary-pale);
+      border-radius: 4px;
+    }
+
+    .mockup-item {
+      flex-shrink: 0;
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity .5s ease, transform .5s ease;
+    }
+
+    .mockup-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .mockup-phone {
+      width: 160px;
+      aspect-ratio: 9/19;
+      border-radius: 28px;
+      border: 2px solid var(--border);
+      background: var(--bg-white);
+      box-shadow: 0 16px 40px rgba(215, 96, 72, 0.13);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: box-shadow .25s;
+    }
+
+    .mockup-phone::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      width: 48px;
+      height: 5px;
+      background: var(--border);
+      border-radius: 3px;
+      z-index: 1;
+    }
+
+    .mockup-img-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--bg);
+      padding-top: 28px;
+    }
+
+    .mockup-img-placeholder .upload-icon {
+      font-size: 28px;
+      opacity: .5;
+    }
+
+    .mockup-img-placeholder .upload-text {
+      font-size: 10px;
+      color: var(--text-light);
+      text-align: center;
+      line-height: 1.5;
+      padding: 0 12px;
+    }
+
+    .mockup-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-mid);
+    }
+
+    /* CHAT */
+    .chat-window {
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      max-width: 680px;
+    }
+
+    .chat-header {
+      background: var(--primary);
+      color: white;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chat-header-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .chat-header-name {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .chat-header-sub {
+      font-size: 11px;
+      opacity: .8;
+    }
+
+    .chat-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .chat-bubble-wrap {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .chat-bubble-wrap.user {
+      flex-direction: row-reverse;
+    }
+
+    .chat-avatar-sm {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+      background: var(--bg);
+      border: 1px solid var(--border);
+    }
+
+    .chat-bubble-wrap.user .chat-avatar-sm {
+      background: var(--primary);
+      color: white;
+    }
+
+    .chat-bubble {
+      max-width: 78%;
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .chat-bubble-wrap.ai .chat-bubble {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-top-left-radius: 4px;
+      color: var(--text-dark);
+    }
+
+    .chat-bubble-wrap.user .chat-bubble {
+      background: var(--primary);
+      color: white;
+      border-top-right-radius: 4px;
+    }
+
+    .chat-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .5px;
+      background: rgba(215, 96, 72, 0.12);
+      color: var(--primary);
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-bottom: 6px;
+    }
+
+    .chat-tag.dev {
+      background: rgba(72, 130, 215, 0.12);
+      color: #3A6FD4;
+    }
+
+    .chat-add-placeholder {
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-light);
+      margin-top: 8px;
+    }
+
+    /* AI TABLE */
+    .ai-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg-white);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+    }
+
+    .ai-table th {
+      background: var(--primary);
+      color: white;
+      padding: 14px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    .ai-table td {
+      padding: 16px 20px;
+      font-size: 13px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-dark);
+      vertical-align: top;
+    }
+
+    .ai-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .ai-table tr:hover td {
+      background: var(--bg);
+    }
+
+    .stage-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .stage-plan {
+      background: #FFF0E8;
+      color: var(--primary);
+    }
+
+    .stage-design {
+      background: #E8F4FF;
+      color: #3A7FD4;
+    }
+
+    .stage-dev {
+      background: #E8F9EE;
+      color: #27A74A;
+    }
+
+    .stage-present {
+      background: #F4E8FF;
+      color: #9A3AD4;
+    }
+
+    .tool-pill {
+      display: inline-block;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2px 10px;
+      font-size: 11px;
+      color: var(--text-mid);
+      margin: 2px 2px 0 0;
+    }
+
+    /* TIMELINE */
+    .timeline {
+      position: relative;
+      padding-left: 32px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--primary) 0%, var(--primary-pale) 100%);
+      border-radius: 2px;
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 36px;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -28px;
+      top: 6px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: 3px solid var(--bg);
+      box-shadow: 0 0 0 2px var(--primary);
+    }
+
+    .timeline-week {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--primary);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .timeline-card {
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 24px;
+      box-shadow: var(--shadow-card);
+      transition: box-shadow .25s;
+    }
+
+    .timeline-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .timeline-card p {
+      font-size: 13px;
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+
+    .timeline-note-placeholder {
+      margin-top: 10px;
+      padding: 10px 14px;
+      background: var(--bg);
+      border-radius: 8px;
+      font-size: 12px;
+      color: var(--text-light);
+      border: 1.5px dashed var(--border);
+    }
+
+    /* TOOLS */
+    .tools-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .tool-card {
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 24px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 160px;
+      transition: box-shadow .25s;
+    }
+
+    .tool-card-icon {
+      font-size: 28px;
+    }
+
+    .tool-card-name {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .tool-card-desc {
+      font-size: 11px;
+      color: var(--text-light);
+    }
+
+    /* KEYWORDS */
+    .keywords-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+      padding: 48px 0;
+    }
+
+    .keyword-tag {
+      background: var(--bg-white);
+      border: 2px solid var(--primary-pale);
+      border-radius: 40px;
+      padding: 12px 28px;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--primary);
+      box-shadow: var(--shadow-card);
+      transition: box-shadow .25s, background .2s, color .2s, border-color .2s;
+    }
+
+    .keyword-tag:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--text-dark);
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+      padding: 48px;
+    }
+
+    footer .footer-logo {
+      font-family: 'Anta', sans-serif;
+      font-size: 32px;
+      font-weight: 400;
+      color: var(--primary);
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    footer p {
+      font-size: 13px;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* IMAGE PLACEHOLDER */
+    .img-placeholder {
+      background: var(--bg-white);
+      border: 2px dashed var(--border);
+      border-radius: 16px;
+      padding: 48px 32px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .img-placeholder-icon {
+      font-size: 36px;
+      opacity: .4;
+    }
+
+    .img-placeholder-text {
+      font-size: 13px;
+      color: var(--text-light);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav {
+        padding: 0 20px;
+      }
+
+      .nav-links {
+        gap: 16px;
+      }
+
+      .nav-links a {
+        font-size: 11px;
+      }
+
+      section {
+        padding: 60px 20px;
+      }
+
+      .hero {
+        padding: 100px 20px 60px;
+      }
+
+      .hero-meta {
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .flow-row {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .flow-arrow {
+        transform: rotate(90deg);
+      }
+
+      .ai-table {
+        font-size: 12px;
+      }
+
+      .ai-table th,
+      .ai-table td {
+        padding: 10px 14px;
+      }
+
+      #cursor-dot,
+      #cursor-ring {
+        display: none;
+      }
+
+      body {
+        cursor: auto;
+      }
+
+      .nav-links a {
+        cursor: auto;
+      }
+    }
+
+    .mockup-phone img {
+      border-radius: 26px;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <body>
+
+    <style>
+      div[style*="dashed"] {
+        display: none !important;
+      }
+    </style>
+
+    <!-- CUSTOM CURSOR -->
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
+
+    <!-- PROGRESS BAR -->
+    <div id="progress-bar-wrap">
+      <div id="progress-bar"></div>
+    </div>
+
+    <!-- NAV -->
+    <nav>
+      <div class="nav-logo">MINIMEDI</div>
+      <div class="nav-links">
+        <a href="#flowchart">구조도</a>
+        <a href="#problem">문제</a>
+        <a href="#persona">페르소나</a>
+        <a href="#features">기능</a>
+        <a href="#screens">화면</a>
+        <a href="#prompt">AI 프롬프트</a>
+        <a href="#process">과정</a>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="top" style="max-width:100%;">
+      <div class="hero-badge">소동물·희귀동물 전문 병원 찾기 앱</div>
+      <h1 class="hero-title"><span class="accent">MINI</span>MEDI</h1>
+      <p class="hero-subtitle">강아지·고양이가 아닌 소동물, 희귀동물을 위한<br>전문 병원을 쉽고 빠르게 찾을 수 있는 앱입니다.</p>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <div class="hero-meta-label">Category</div>
+          <div class="hero-meta-value">반려동물 / 헬스케어</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="hero-meta-label">Platform</div>
+          <div class="hero-meta-value">iOS · Android</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="hero-meta-label">Year</div>
+          <div class="hero-meta-value">2025</div>
+        </div>
+      </div>
+      <div class="hero-phone-wrap">
+        <div class="hero-phone">
+          <div class="phone-logo">MINIMEDI</div>
+          <div class="phone-start">시작하기</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 01 FLOWCHART -->
+    <section id="flowchart">
+      <div class="section-num">01 — Flow Chart</div>
+      <h2 class="section-title">앱 <em>구조도</em></h2>
+      <p class="section-desc">MINIMEDI의 전체 화면 흐름과 기능 구조를 한눈에 확인하세요.</p>
+      <div class="flowchart-wrap" data-glow>
+        <div class="flow-row">
+          <div class="flow-node primary">앱 시작</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node primary">로그인 / 회원가입</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node primary">홈 화면</div>
+        </div>
+        <div class="flow-row">
+          <div class="flow-node">병원 검색</div>
+          <div class="flow-node">내 동물 등록</div>
+          <div class="flow-node">즐겨찾기</div>
+          <div class="flow-node">커뮤니티</div>
+          <div class="flow-node">설정</div>
+        </div>
+        <div class="flow-row">
+          <div class="flow-sub-row">
+            <div class="flow-node sub">동물 종류 필터</div>
+            <div class="flow-node sub">위치 기반 탐색</div>
+            <div class="flow-node sub">병원 상세 정보</div>
+            <div class="flow-node sub">예약 / 전화</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 02 PROBLEM -->
+    <style>
+      .problem-grid {
+        display: grid;
+        /* 가로로 2개의 박스를 배치하고 너비를 똑같이(1fr) 나눈다네 */
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        /* 박스 사이의 간격 */
+        max-width: 1200px;
+        /* 화면이 너무 넓어지면 박스가 찢어져 보이니 제한을 두게 */
+        margin: 40px auto;
+        /* 위아래 여백과 좌우 중앙 정렬 */
+      }
+
+      .problem-card {
+        background: #fff;
+        /* 배경색 */
+        padding: 30px;
+        border-radius: 20px;
+        /* 둥근 모서리 */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        /* 부드러운 그림자 */
+        height: 100%;
+        /* 박스 높이를 통일함 */
+      }
+
+      /* 모바일(화면 폭 768px 이하)에서는 한 줄로 보이게 처리하는 게 가독성에 좋네 */
+      @media (max-width: 768px) {
+        .problem-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+    <section id="problem">
+      <div class="section-num">02 — Problem</div>
+      <h2 class="section-title">이런 경험, <em>있지 않으신가요?</em></h2>
+      <p class="section-desc">소동물·희귀동물을 키우는 분들이 겪는 공통된 어려움에서 MINIMEDI가 시작됐습니다.</p>
+      <div class="problem-grid">
+        <div class="problem-card" data-glow>
+          <div class="problem-num">01</div>
+          <h3>병원을 찾기가 너무 어려워요</h3>
+          <p>햄스터, 토끼, 파충류 등 소동물을 진료해주는 병원이 어디 있는지 검색해도 잘 나오지 않습니다.</p>
+        </div>
+        <div class="problem-card" data-glow>
+          <div class="problem-num">02</div>
+          <h3>갔더니 진료를 못 한다고 해요</h3>
+          <p>동물병원에 찾아갔지만 소동물은 보지 않는다는 말을 듣고 허탕치는 경험을 반복합니다.</p>
+        </div>
+        <div class="problem-card" data-glow>
+          <div class="problem-num">03</div>
+          <h3>응급 상황인데 어디로 가야 할지 몰라요</h3>
+          <p>반려동물이 갑자기 아플 때, 어디로 달려가야 할지 몰라 패닉 상태에서 시간을 낭비하게 됩니다.</p>
+        </div>
+        <div class="problem-card" data-glow>
+          <div class="problem-num">04</div>
+          <h3>경험을 공유할 곳이 없어요</h3>
+          <p>믿을 수 있는 병원을 찾아도 다른 소동물 보호자들과 정보를 나눌 채널이 마땅치 않습니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 03 PERSONA -->
+    <section id="persona">
+      <div class="section-num">03 — Persona</div>
+      <h2 class="section-title">누구를 위한 <em>앱인가요?</em></h2>
+      <p class="section-desc">소동물·희귀동물을 키우는 다양한 보호자를 인터뷰해 대표 페르소나를 도출했습니다.</p>
+      <div class="persona-grid">
+        <div class="persona-card" data-glow>
+          <div class="persona-avatar">🐹</div>
+          <div class="persona-name">도주연 · 23세 바리스타</div>
+          <div class="persona-info">햄스터 1마리 · 대전 서구 · 13개월</div>
+          <div class="persona-quote">"햄스터를 기르며 더 이상 정답없는 검색대신 전용 인프라를 갖고 싶어요."</div>
+        </div>
+      </div>
+      <div class="persona-card" data-glow>
+        <div class="persona-avatar">🦎</div>
+        <div class="persona-name">주수진 · 45세 주부</div>
+        <div class="persona-info">카멜레온 1마리 · 부산 강서구 · 35개월</div>
+        <div class="persona-quote">"전문적인 치료를 할 수 있는 병원과 믿을 수 있는 정보를 알고 싶어요."</div>
+      </div>
+      <div class="persona-card" data-glow>
+        <div class="persona-avatar">🐍</div>
+        <div class="persona-name">이재현 · 34세 헬스트레이너</div>
+        <div class="persona-info">볼 파이톤(뱀) · 서울 성수동 · 14년</div>
+        <div class="persona-quote">"저의 유일한 가족인 반려동물의 병원을 찾을 때 막연한 불안감을 더는 느끼지 않고 싶어요."</div>
+      </div>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 04 FEATURES -->
+    <section id="features">
+      <div class="section-num">04 — Key Features</div>
+      <h2 class="section-title">MINIMEDI가 <em>해결합니다</em></h2>
+      <p class="section-desc">소동물·희귀동물 보호자를 위해 특화된 핵심 기능들을 소개합니다.</p>
+      <div class="features-grid">
+        <div class="feature-card" data-glow>
+          <div class="feature-icon">🔍</div>
+          <h3>Feature 01 — 전문 병원 탐색</h3>
+          <p>동물 종류별로 진료 가능한 병원을 필터링해 바로 찾을 수 있습니다.</p>
+        </div>
+        <div class="feature-card" data-glow>
+          <div class="feature-icon">📍</div>
+          <h3>Feature 02 — 위치 기반 검색</h3>
+          <p>현재 위치에서 가장 가까운 소동물 전문 병원을 지도로 확인합니다.</p>
+        </div>
+        <div class="feature-card" data-glow>
+          <div class="feature-icon">⭐</div>
+          <h3>Feature 03 — 즐겨찾기</h3>
+          <p>마음에 드는 병원들을 즐겨찾기 목록에 저장해 간편히 확인합니다.</p>
+        </div>
+        <div class="feature-card" data-glow>
+          <div class="feature-icon">🚨</div>
+          <h3>Feature 04 — 응급 병원 안내</h3>
+          <p>야간·주말에도 진료 가능한 응급 병원을 빠르게 찾아 안내합니다.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 05 SCREENS -->
+    <section id="screens">
+
+      <style>
+        /* 가로 스크롤 제거 */
+        body {
+          overflow-x: hidden;
+        }
+
+        #screens {
+          overflow: hidden;
+        }
+
+        /* 목업 6개 한 줄 정렬 */
+        #screens-grid {
+          display: grid;
+          grid-template-columns: repeat(6, minmax(120px, 1fr));
+          gap: 20px;
+          align-items: start;
+          width: 100%;
+          overflow: hidden;
+        }
+
+        .mockup-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .mockup-phone {
+          position: relative;
+          overflow: hidden;
+          border-radius: 28px;
+          aspect-ratio: 9 / 19;
+          width: 100%;
+          background: #f4e7d3;
+        }
+
+        .mockup-phone img {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: top;
+          display: block;
+        }
+
+        .mockup-label {
+          margin-top: 14px;
+          text-align: center;
+        }
+      </style>
+
+      <div class="section-num">05 — Main Screens</div>
+
+      <h2 class="section-title">
+        앱 화면을 <em>미리 보세요</em>
+      </h2>
+
+      <p class="section-desc">
+        6개의 목업 이미지 공간입니다. 스크롤 시 하나씩 순차적으로 나타납니다.
+      </p>
+
+      <div class="screens-grid" id="screens-grid">
+
+        <!-- 시작 화면 -->
+        <div class="mockup-item" data-delay="0">
+          <div class="mockup-phone" data-glow>
+            <img src="LOGIN.png" alt="시작 화면">
+          </div>
+          <div class="mockup-label">시작 화면</div>
+        </div>
+
+        <!-- 홈 화면 -->
+        <div class="mockup-item" data-delay="120">
+          <div class="mockup-phone" data-glow>
+            <img src="MAIN.png" alt="홈 화면">
+          </div>
+          <div class="mockup-label">홈 화면</div>
+        </div>
+
+        <!-- 길찾기 화면 -->
+        <div class="mockup-item" data-delay="240">
+          <div class="mockup-phone" data-glow>
+            <img src="NAVIGATION.png" alt="길찾기 화면">
+          </div>
+          <div class="mockup-label">길찾기 화면</div>
+        </div>
+
+        <!-- 지도 화면 -->
+        <div class="mockup-item" data-delay="360">
+          <div class="mockup-phone" data-glow>
+            <img src="ANIMALFILTER.png" alt="">
+          </div>
+          <div class="mockup-label">동물 필터 화면</div>
+        </div>
+
+        <!-- 내 동물 관리 -->
+        <div class="mockup-item" data-delay="480">
+          <div class="mockup-phone" data-glow>
+            <img src="FAV.png" alt="">
+          </div>
+          <div class="mockup-label">즐겨찾기 화면</div>
+        </div>
+
+        <!-- 리뷰 화면 -->
+        <div class="mockup-item" data-delay="600">
+          <div class="mockup-phone" data-glow>
+            <img src="PROFILE.png" alt="">
+          </div>
+          <div class="mockup-label">프로필 화면</div>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 06 AI PROMPT -->
+    <section id="prompt">
+      <div class="section-num">06 — AI Prompt</div>
+      <h2 class="section-title">실제로 사용한 <em>AI 프롬프트</em></h2>
+      <p class="section-desc">기획부터 개발, 발표까지 AI와 나눈 실제 대화 예시입니다.</p>
+      <div class="chat-window">
+        <div class="chat-header">
+          <div class="chat-header-avatar">🤖</div>
+          <div>
+            <div class="chat-header-name">MINIMEDI 기획 대화</div>
+            <div class="chat-header-sub">실제 사용 프롬프트 기록</div>
+          </div>
+        </div>
+        <div class="chat-body">
+          <div class="chat-bubble-wrap user">
+            <div class="chat-avatar-sm">나</div>
+            <div class="chat-bubble">내가 앱을 쓸 사람의 페르소나를 정하고 있어. 이름은 도주연, 23세로 바리스타 일을 하고 있어.
+
+              이 사람의 mbti는 infp야. 이 앱이 생기기 전 이 사람의
+
+              -가장 불편한 점<br>
+
+              -원하는것(goal)<br>
+
+              -지금 쓰는 해결방법<br>
+
+              -이 사람이 이 앱을 언제 쓸까?<br>
+
+              -어떻게 쓸까?<br>
+
+              -이 앱이 생기면?<br>
+
+              마지막으로 이 사람에 대한 한 줄 요약도 해 줘</div>
+          </div>
+          <div class="chat-bubble-wrap ai">
+            <div class="chat-avatar-sm">🤖</div>
+            <div class="chat-bubble">
+              <span class="chat-tag">기획</span><br>
+              주연 씨가 키우는 소중한 '작은 생명'이 아플 때, 그녀가 겪을<br>
+              심리적 변화와 행동 패턴을 분석해 보았습니다.
+              1. 정보의 비대칭: 커뮤니티에서 추천받은 병원이 막상 가보니···
+            </div>
+          </div>
+          <div class="chat-bubble-wrap user">
+            <div class="chat-avatar-sm">나</div>
+            <div class="chat-bubble">희귀동물은 증상이 급격히 나빠지는 경우가 많아. 그래서 '현재 진료 가능'과<br> '특수 수술 가능' 여부가 병원 선택의 핵심이야.
+              메인 리스트에서 이 두 정보를<br>
+              사용자에게 가장 스트레스 없이 전달할 수 있는 카드 레이아웃 설계를 제안해줘.
+              정보가 많아도 미니멀함을 유지하는 방법이 있을까?</div>
+          </div>
+          <div class="chat-bubble-wrap ai">
+            <div class="chat-avatar-sm">🤖</div>
+            <div class="chat-bubble">
+              <span class="chat-tag">기획</span><br>
+              사용자의 시선이 머무는 우측 상단에 24시/진료 중 필터를<br> 배치하여 긴급성을 해결하는 방법은 어떨까요?
+            </div>
+          </div>
+
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 07 AI UTILIZATION -->
+    <section id="ai-use">
+      <div class="section-num">07 — AI Utilization</div>
+      <h2 class="section-title">AI를 어떻게 <em>활용했나요?</em></h2>
+      <p class="section-desc">기획·디자인·개발·발표 전 단계에서 AI 도구를 협업 파트너로 사용한 경험을 정리했습니다.</p>
+      <table class="ai-table">
+        <thead>
+          <tr>
+            <th>단계</th>
+            <th>활용 목적</th>
+            <th>도구</th>
+            <th>빈도</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="stage-badge stage-plan">기획</span></td>
+            <td>아이디어 구체화, 페르소나 설계, 기획서 초안</td>
+            <td><span class="tool-pill">Claude</span><span class="tool-pill">Google Docs</span><span
+                class="tool-pill">GEMINI</span></td>
+            <td>⌛⌛⌛⌛</td>
+          </tr>
+          <tr>
+            <td><span class="stage-badge stage-design">디자인</span></td>
+            <td>UI 레이아웃 제안, 컬러 시스템, 목업 생성</td>
+            <td><span class="tool-pill">Figma</span><span class="tool-pill">Claude</span></td>
+            <td>⌛⌛⌛⌛⌛</td>
+          </tr>
+          <tr>
+            <td><span class="stage-badge stage-dev">개발</span></td>
+            <td>화면 구현, 기능 로직, 오류 해결</td>
+            <td><span class="tool-pill">Claude</span><span class="tool-pill">AI studio</span></td>
+            <td>⌛⌛⌛⌛</td>
+          </tr>
+          <tr>
+            <td><span class="stage-badge stage-present">발표</span></td>
+            <td>포트폴리오 구성, 발표 스크립트 작성</td>
+            <td><span class="tool-pill">Claude</span><span class="tool-pill">Chat GPT</span><span
+                class="tool-pill">Antigravity</span></td>
+            <td>⌛⌛⌛</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 08 PROCESS -->
+    <section id="process">
+      <div class="section-num">08 — Process</div>
+      <h2 class="section-title">3주간의 <em>작업 과정</em></h2>
+      <p class="section-desc">아이디어 구상부터 최종 발표까지의 여정을 기록했습니다.</p>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-week">Week 01</div>
+          <div class="timeline-card" data-glow>
+            <h3>기획 · 리서치</h3>
+            <p>소동물 보호자 인터뷰, 경쟁 앱 분석, 페르소나 설정, 플로우차트 작성</p>
+
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-week">Week 02</div>
+          <div class="timeline-card" data-glow>
+            <h3>UI 디자인</h3>
+            <p>와이어프레임 제작, 디자인 시스템 구성, 프로토타입 완성</p>
+
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-week">Week 03</div>
+          <div class="timeline-card" data-glow>
+            <h3>개발 · 발표 준비</h3>
+            <p>화면 구현, 기능 테스트, 포트폴리오 완성, 최종 발표</p>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 09 TOOLS -->
+    <section id="tools">
+      <div class="section-num">09 — Tools</div>
+      <h2 class="section-title">사용한 <em>도구들</em></h2>
+      <p class="section-desc">MINIMEDI를 만들기 위해 사용한 툴킷입니다.</p>
+      <div class="tools-grid">
+        <div class="tool-card" data-glow>
+          <div class="tool-card-icon">🎨</div>
+          <div>
+            <div class="tool-card-name">Figma</div>
+            <div class="tool-card-desc">UI · 프로토타입</div>
+          </div>
+        </div>
+        <div class="tool-card" data-glow>
+          <div class="tool-card-icon">🤖</div>
+          <div>
+            <div class="tool-card-name">Claude</div>
+            <div class="tool-card-desc">기획 · 개발</div>
+          </div>
+        </div>
+        <div class="tool-card" data-glow>
+          <div class="tool-card-icon">📋</div>
+          <div>
+            <div class="tool-card-name">CHAT GPT</div>
+            <div class="tool-card-desc">기획 · 개발</div>
+          </div>
+        </div>
+        <div class="tool-card" data-glow>
+          <div class="tool-card-icon">✨</div>
+          <div>
+            <div class="tool-card-name">DRAW.IO</div>
+            <div class="tool-card-desc">플로우차트 구성</div>
+          </div>
+        </div>
+        <div class="tool-card" data-glow>
+          <div class="tool-card-icon">🔍</div>
+          <div>
+            <div class="tool-card-name">GOOGLE DOCS</div>
+            <div class="tool-card-desc">앱 페르소나 구성</div>
+          </div>
+        </div>
+        <div class="tool-card" data-glow style="border-style:dashed;opacity:.6;">
+          <div class="tool-card-icon">➕</div>
+          <div>
+            <div class="tool-card-name">도구 추가</div>
+            <div class="tool-card-desc">사용한 툴 입력</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 10 KEYWORDS -->
+    <section id="keywords">
+      <div class="section-num">10 — Keywords</div>
+      <h2 class="section-title">MINIMEDI를 <em>5가지 키워드</em>로</h2>
+      <p class="section-desc">이 앱을 가장 잘 표현하는 핵심 키워드들입니다.</p>
+      <div class="keywords-wrap">
+        <div class="keyword-tag" data-glow># 소동물</div>
+        <div class="keyword-tag" data-glow># 희귀동물</div>
+        <div class="keyword-tag" data-glow># 병원 탐색</div>
+        <div class="keyword-tag" data-glow># 응급 대응</div>
+        <div class="keyword-tag" data-glow># 보호자 안심</div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-logo">MINIMEDI</div>
+      <p>소동물·희귀동물 보호자를 위한 병원 찾기 앱 · 개인 프로젝트 2026</p>
+      <p style="margin-top:8px;font-size:12px;opacity:.4;">AI와 함께 만든 나만의 앱 made by. 이윤진</p>
+    </footer>
+
+    <script>
+      /* ── 1. CUSTOM CURSOR ── */
+      const dot = document.getElementById('cursor-dot');
+      const ring = document.getElementById('cursor-ring');
+
+      document.addEventListener('mousemove', e => {
+        dot.style.transform = `translate(${e.clientX - 4}px, ${e.clientY - 4}px)`;
+        ring.style.transform = `translate(${e.clientX - 16}px, ${e.clientY - 16}px)`;
+      });
+
+      /* cursor ring grows on interactive elements */
+      const interactiveEls = document.querySelectorAll('a, button, [data-glow], .keyword-tag');
+      interactiveEls.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          ring.style.width = '48px';
+          ring.style.height = '48px';
+          ring.style.opacity = '0.7';
+          ring.style.marginLeft = '-8px';
+          ring.style.marginTop = '-8px';
+        });
+        el.addEventListener('mouseleave', () => {
+          ring.style.width = '32px';
+          ring.style.height = '32px';
+          ring.style.opacity = '0.5';
+          ring.style.marginLeft = '0';
+          ring.style.marginTop = '0';
+        });
+      });
+
+      /* ── 2. SCROLL PROGRESS BAR ── */
+      const bar = document.getElementById('progress-bar');
+      window.addEventListener('scroll', () => {
+        const total = document.body.scrollHeight - window.innerHeight;
+        const progress = (window.scrollY / total) * 100;
+        bar.style.width = progress + '%';
+      });
+
+      /* ── 3. HOVER GLOW (JS mouseenter — no translateY) ── */
+      document.querySelectorAll('[data-glow]').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          el.style.boxShadow = '0 0 0 2px #F5C4B3, 0 4px 32px rgba(215,96,72,0.22)';
+        });
+        el.addEventListener('mouseleave', () => {
+          el.style.boxShadow = '';
+        });
+      });
+
+      /* ── 4. LAZY LOADING — sequential mockup reveal ── */
+      const mockupItems = document.querySelectorAll('.mockup-item');
+      const mockupObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const el = entry.target;
+            const delay = parseInt(el.dataset.delay) || 0;
+            setTimeout(() => el.classList.add('visible'), delay);
+            mockupObserver.unobserve(el);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      mockupItems.forEach(item => mockupObserver.observe(item));
+    </script>
+  </body>
+
+</html>
